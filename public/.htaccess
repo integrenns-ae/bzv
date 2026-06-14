@@ -1,0 +1,42 @@
+# --- Bienenzuchtverein Grünberg ---
+
+RewriteEngine On
+
+# HTTPS erzwingen
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# saubere URLs: /termine.ics → /termine.ics.php
+RewriteRule ^termine\.ics$ /termine.ics.php [L]
+
+# Aktuelles-Slug-URLs: /aktuelles/<slug>  →  /aktuelles-detail.php?slug=<slug>
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^aktuelles/([a-z0-9-]+)/?$ /aktuelles-detail.php?slug=$1 [L,QSA]
+
+# Sensitive Endungen blocken
+<FilesMatch "\.(sql|sql\.gz|env|log)$">
+    Require all denied
+</FilesMatch>
+
+# Sicherheits-Header
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "interest-cohort=()"
+</IfModule>
+
+# Caching für statische Assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg    "access plus 30 days"
+    ExpiresByType image/png     "access plus 30 days"
+    ExpiresByType image/webp    "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType text/css      "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+</IfModule>
+
+# Standardseite
+DirectoryIndex index.php

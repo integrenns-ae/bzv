@@ -1,0 +1,14 @@
+Lies zuerst DESIGN_BRIEF.md und README.md in diesem Projekt.
+
+Auftrag: Überarbeite das visuelle Design der öffentlichen Seiten (public/index.php, vorstand.php, termine.php, aktuelles.php, aktuelles-detail.php, infos.php, schwarm.php, mitglied-werden.php, impressum.php, datenschutz.php) sowie das gemeinsame Layout in library/Templates.php.
+
+Du hast volle kreative Freiheit für Farben, Typografie, Hero-Konzepte, Komponenten-Stil, Animationen — entscheide selbst, was zum Verein passt. Die Constraints aus DESIGN_BRIEF.md (PHP-Routen, DB-Variablen, Schwarm-Notruf-Sichtbarkeit, Mobile-First, CMS-Kompatibilität) sind aber bindend.
+
+NICHT anfassen: public/admin/, public/mitglieder/, library/{Database,Auth,Helpers,Mailer}.php, scripts/, *.sql, .htaccess (außer du musst neue Assets-Pfade ergänzen).
+
+Live-Preview starten mit:
+    php -S localhost:8000 -t public
+
+Für reine Design-Iteration ohne MySQL-Setup: arbeite mit den DB-unabhängigen Seiten (schwarm.php, mitglied-werden.php, impressum.php, datenschutz.php) zuerst und nutze Mock-Daten für die DB-Seiten — am Ende wieder rausnehmen.
+
+Wenn fertig: kurz Bescheid, dann Backend-Audit durch Claude Code.

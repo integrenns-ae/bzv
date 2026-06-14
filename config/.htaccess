@@ -1,0 +1,2 @@
+# config/ enthält DB-Credentials — niemals direkt aus dem Web erreichbar.
+Require all denied

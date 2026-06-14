@@ -1,0 +1,22 @@
+<?php
+/**
+ * config/db.local.php — auf dem Live-Server angelegt, NICHT im Repo.
+ * Diese Datei dient nur als Vorlage. Auf STRATO direkt per FTP eine
+ * `db.local.php` in /htdocs/bzv/config/ ablegen, ausgefüllt wie unten.
+ */
+
+// --- STRATO MariaDB (TCP-Verbindung mit Host/Port) ---
+define('DB_HOST', 'rdbms.strato.de');           // STRATO zeigt den Hostnamen im DB-Panel
+define('DB_PORT', 3306);
+define('DB_NAME', 'DB1234567');                  // STRATO-vergebener Name
+define('DB_USER', 'U1234567');                   // meist identisch mit DB_NAME
+define('DB_PASS', 'HIER_DAS_DB_PASSWORT');
+
+// --- Pixabay (gleicher Key wie lokal, falls Bild-Suche im Admin gewünscht) ---
+define('PIXABAY_KEY', '');                       // ggf. eintragen
+
+// --- Mail (Live: echte Mails über STRATO-Sendmail) ---
+// MAIL_TRANSPORT NICHT setzen — Default 'mail' greift dann automatisch.
+// APP_MAIL_FROM optional überschreiben, falls eine spezielle Absenderadresse
+// nötig ist:
+// define('APP_MAIL_FROM', 'noreply@bienenzuchtverein-gruenberg.de');

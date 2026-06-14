@@ -1,0 +1,2 @@
+# library/ darf niemals direkt aus dem Web erreichbar sein.
+Require all denied

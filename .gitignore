@@ -1,0 +1,20 @@
+/config/db.local.php
+/.deploy.env
+/logs/
+/.DS_Store
+/public/.DS_Store
+# Bilder NICHT ignorieren — wir wollen sie versionieren, damit GoLive ohne erneuten Import klappt.
+# Nur user-uploads aus dem Admin (zufällige Dateinamen mit hex+ext) bleiben außen vor.
+/public/bilder/news/*.tmp
+/public/bilder/vorstand/*.tmp
+/public/mitglieder/doks/
+/public/uploads/
+# Trix-Editor- und Galerie-Uploads (Random-Hex-Namen) — leben nur auf dem Live-Server
+/public/bilder/editor/
+/public/bilder/galerie/
+/backups/*
+!/backups/.gitkeep
+*.sql.gz
+*.tar.gz
+node_modules/
+vendor/
