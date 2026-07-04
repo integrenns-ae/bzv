@@ -162,36 +162,27 @@ Templates::header('Königinnen bestellen', '/mitglieder/');
                class="w-full border border-stone-300 rounded-lg px-3 py-2 mt-1">
       </label>
 
+      <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-900" data-edit-resource="page_blocks" data-edit-id="bestellung.preis_hinweis">
+        <strong>Hinweis zu den Preisen:</strong> <?= h(block('bestellung.preis_hinweis',
+            'Die aktuellen Preise werden mit der jeweiligen Bestellaufforderung per E-Mail bekannt gegeben. Bitte tragt hier nur die gewünschte Menge ein — die Abrechnung erfolgt später durch den Vorstand.')) ?>
+        <div class="mt-1 text-xs">Der Verein bezuschusst eine Königin pro Mitglied und Jahr.</div>
+      </div>
+
       <fieldset class="border border-stone-200 rounded-xl p-4 space-y-3">
         <legend class="text-sm font-bold px-2">Anzahl Königinnen</legend>
         <label class="flex items-center justify-between gap-3">
-          <span>
-            <span class="font-semibold">Standbegattet</span>
-            <span class="text-sm text-stone-500">— <?= number_format($preisStand, 2, ',', '.') ?> € / Stück</span>
-          </span>
-          <input type="number" name="anzahl_stand" id="anz-stand" min="0" step="1"
+          <span class="font-semibold">Standbegattet</span>
+          <input type="number" name="anzahl_stand" min="0" step="1"
                  value="<?= h($_POST['anzahl_stand'] ?? '0') ?>"
-                 data-preis="<?= h(number_format($preisStand, 2, '.', '')) ?>"
                  class="w-24 border border-stone-300 rounded-lg px-3 py-2 text-right">
         </label>
         <label class="flex items-center justify-between gap-3">
-          <span>
-            <span class="font-semibold">Belegstellenbegattet</span>
-            <span class="text-sm text-stone-500">— <?= number_format($preisBeleg, 2, ',', '.') ?> € / Stück</span>
-          </span>
-          <input type="number" name="anzahl_beleg" id="anz-beleg" min="0" step="1"
+          <span class="font-semibold">Belegstellenbegattet</span>
+          <input type="number" name="anzahl_beleg" min="0" step="1"
                  value="<?= h($_POST['anzahl_beleg'] ?? '0') ?>"
-                 data-preis="<?= h(number_format($preisBeleg, 2, '.', '')) ?>"
                  class="w-24 border border-stone-300 rounded-lg px-3 py-2 text-right">
         </label>
       </fieldset>
-
-      <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm space-y-1">
-        <div>Zwischensumme: <span id="brutto" class="font-semibold">– €</span></div>
-        <div>Vereinszuschuss: <span class="font-semibold text-emerald-700">– <?= number_format($zuschuss, 2, ',', '.') ?> €</span>
-          <span class="text-stone-500">(eine Königin / Mitglied / Jahr)</span></div>
-        <div class="text-base">Zu zahlen: <span id="summe" class="font-bold text-lg text-amber-900">– €</span></div>
-      </div>
 
       <label class="block">
         <span class="text-sm font-semibold">Bemerkung</span>
@@ -203,31 +194,6 @@ Templates::header('Königinnen bestellen', '/mitglieder/');
         Bestellung absenden
       </button>
     </form>
-
-    <script>
-      (function() {
-        const form   = document.currentScript.previousElementSibling;
-        const stand  = form.querySelector('#anz-stand');
-        const beleg  = form.querySelector('#anz-beleg');
-        const elBrutto = form.querySelector('#brutto');
-        const elSumme  = form.querySelector('#summe');
-        const zuschuss = <?= json_encode($zuschuss) ?>;
-        function calc() {
-          const ns = parseInt(stand.value || '0', 10);
-          const nb = parseInt(beleg.value || '0', 10);
-          const brutto = ns * parseFloat(stand.dataset.preis) + nb * parseFloat(beleg.dataset.preis);
-          const abzug  = (ns + nb) >= 1 ? zuschuss : 0;
-          if ((ns + nb) > 0) {
-            elBrutto.textContent = brutto.toFixed(2).replace('.', ',') + ' €';
-            elSumme.textContent  = (brutto - abzug).toFixed(2).replace('.', ',') + ' €';
-          } else {
-            elBrutto.textContent = '– €';
-            elSumme.textContent  = '– €';
-          }
-        }
-        [stand, beleg].forEach(el => el.addEventListener('input', calc));
-      })();
-    </script>
   <?php endif; ?>
 </section>
 

@@ -158,22 +158,21 @@ Templates::header('Futter bestellen', '/mitglieder/');
                class="w-full border border-stone-300 rounded-lg px-3 py-2 mt-1">
       </label>
 
+      <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-900" data-edit-resource="page_blocks" data-edit-id="bestellung.preis_hinweis">
+        <strong>Hinweis zu den Preisen:</strong> <?= h(block('bestellung.preis_hinweis',
+            'Die aktuellen Preise werden mit der jeweiligen Bestellaufforderung per E-Mail bekannt gegeben. Bitte tragt hier nur die gewünschte Menge ein — die Abrechnung erfolgt später durch den Vorstand.')) ?>
+      </div>
+
       <?php $sorteSel = $_POST['sorte'] ?? 'apifonda'; ?>
       <fieldset class="border border-stone-200 rounded-xl p-4">
         <legend class="text-sm font-bold px-2">Futtersorte</legend>
         <label class="flex items-start gap-3 cursor-pointer py-1">
-          <input type="radio" name="sorte" value="apifonda" <?= $sorteSel === 'apifonda' ? 'checked' : '' ?> class="mt-1" data-preis="<?= h(number_format($preisApifonda, 2, '.', '')) ?>">
-          <span>
-            <span class="font-semibold">Apifonda (Teig)</span><br>
-            <span class="text-sm text-stone-500"><?= number_format($preisApifonda, 2, ',', '.') ?> € pro kg</span>
-          </span>
+          <input type="radio" name="sorte" value="apifonda" <?= $sorteSel === 'apifonda' ? 'checked' : '' ?> class="mt-1">
+          <span class="font-semibold">Apifonda (Teig)</span>
         </label>
         <label class="flex items-start gap-3 cursor-pointer py-1">
-          <input type="radio" name="sorte" value="apiinvert" <?= $sorteSel === 'apiinvert' ? 'checked' : '' ?> class="mt-1" data-preis="<?= h(number_format($preisApiinvert, 2, '.', '')) ?>">
-          <span>
-            <span class="font-semibold">Apiinvert (flüssig)</span><br>
-            <span class="text-sm text-stone-500"><?= number_format($preisApiinvert, 2, ',', '.') ?> € pro kg</span>
-          </span>
+          <input type="radio" name="sorte" value="apiinvert" <?= $sorteSel === 'apiinvert' ? 'checked' : '' ?> class="mt-1">
+          <span class="font-semibold">Apiinvert (flüssig)</span>
         </label>
       </fieldset>
 
@@ -183,12 +182,6 @@ Templates::header('Futter bestellen', '/mitglieder/');
                value="<?= h($_POST['menge'] ?? '') ?>"
                class="w-40 border border-stone-300 rounded-lg px-3 py-2 mt-1">
       </label>
-
-      <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm">
-        Voraussichtliche Summe:
-        <span id="summe" class="font-bold text-lg text-amber-900">– €</span>
-        <span class="text-stone-500">(verbindliche Abrechnung durch den Vorstand)</span>
-      </div>
 
       <label class="block">
         <span class="text-sm font-semibold">Bemerkung</span>
@@ -200,23 +193,6 @@ Templates::header('Futter bestellen', '/mitglieder/');
         Bestellung absenden
       </button>
     </form>
-
-    <script>
-      (function() {
-        const form  = document.currentScript.previousElementSibling;
-        const menge = form.querySelector('#menge');
-        const summe = form.querySelector('#summe');
-        function calc() {
-          const sel = form.querySelector('input[name=sorte]:checked');
-          const preis = parseFloat(sel.dataset.preis);
-          const kg = parseInt(menge.value || '0', 10);
-          if (kg > 0) summe.textContent = (kg * preis).toFixed(2).replace('.', ',') + ' €';
-          else summe.textContent = '– €';
-        }
-        form.querySelectorAll('input[name=sorte]').forEach(r => r.addEventListener('change', calc));
-        menge.addEventListener('input', calc);
-      })();
-    </script>
   <?php endif; ?>
 </section>
 

@@ -282,7 +282,7 @@ Templates::header('Willkommen', '/');
       </div>
     </div>
     <div class="md:col-span-4 hidden md:flex items-center justify-center">
-      <img src="/assets/logo.svg" alt="<?= h(SITE_NAME) ?>" class="max-h-40 w-auto filter drop-shadow-md select-none">
+      <img src="/assets/logo.svg" alt="<?= h(SITE_NAME) ?>" class="max-h-56 w-auto filter drop-shadow-md select-none">
     </div>
   </div>
 </section>

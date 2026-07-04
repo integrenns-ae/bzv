@@ -319,7 +319,7 @@ final class Templates
   <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
     <a href="/" class="flex items-center group" aria-label="Zur Startseite">
       <img src="/assets/logo.svg" alt="<?= h(SITE_NAME) ?>"
-           class="h-14 md:h-16 w-auto group-hover:scale-[1.02] transition-transform duration-200"
+           class="h-20 md:h-24 w-auto group-hover:scale-[1.02] transition-transform duration-200"
            width="1836" height="1336">
     </a>
     

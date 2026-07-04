@@ -238,18 +238,18 @@ Templates::header('Behandlung & Völkermeldung', '/mitglieder/');
       <!-- Oxalsäure -->
       <div class="space-y-3 border-t border-stone-200 pt-5">
         <h2 class="text-sm font-bold uppercase tracking-wide text-stone-500">Oxalsäure-Bestellung <span class="font-normal normal-case text-stone-400">(optional)</span></h2>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-900" data-edit-resource="page_blocks" data-edit-id="bestellung.preis_hinweis">
+          <strong>Hinweis zu den Preisen:</strong> <?= h(block('bestellung.preis_hinweis',
+              'Die aktuellen Preise werden mit der jeweiligen Bestellaufforderung per E-Mail bekannt gegeben. Bitte tragt hier nur die gewünschte Menge ein — die Abrechnung erfolgt später durch den Vorstand.')) ?>
+        </div>
+
         <label class="flex items-center justify-between gap-3">
-          <span>
-            <span class="font-semibold">Oxalsäure</span>
-            <span class="text-sm text-stone-500">— <?= number_format($preisOxal, 2, ',', '.') ?> € pro Einheit</span>
-          </span>
-          <input type="number" name="anzahl_oxal" id="anz-oxal" min="0" step="1"
+          <span class="font-semibold">Anzahl Oxalsäure-Einheiten</span>
+          <input type="number" name="anzahl_oxal" min="0" step="1"
                  value="<?= h($_POST['anzahl_oxal'] ?? '0') ?>"
                  class="w-24 border border-stone-300 rounded-lg px-3 py-2 text-right">
         </label>
-        <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm">
-          Abzubuchender Betrag: <span id="summe" class="font-bold text-lg text-amber-900">0,00 €</span>
-        </div>
 
         <!-- IBAN nur relevant bei Bestellung -->
         <div id="sepa-block" class="space-y-3">
@@ -291,20 +291,6 @@ Templates::header('Behandlung & Völkermeldung', '/mitglieder/');
       </button>
     </form>
 
-    <script>
-      (function() {
-        const form  = document.currentScript.previousElementSibling;
-        const oxal  = form.querySelector('#anz-oxal');
-        const summe = form.querySelector('#summe');
-        const preis = <?= json_encode($preisOxal) ?>;
-        function calc() {
-          const n = parseInt(oxal.value || '0', 10);
-          summe.textContent = (n * preis).toFixed(2).replace('.', ',') + ' €';
-        }
-        oxal.addEventListener('input', calc);
-        calc();
-      })();
-    </script>
   <?php endif; ?>
 </section>
 

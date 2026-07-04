@@ -55,19 +55,17 @@ Templates::header('Vorstand', '/vorstand.php');
           </div>
           
           <?php if ($m['email'] || $m['phone']): ?>
-            <div class="mt-6 pt-5 border-t border-stone-100 flex flex-col gap-2 text-sm">
-              <?php if ($m['email']): ?>
-                <a href="mailto:<?= h($m['email']) ?>" 
-                   class="flex items-center justify-center gap-2 text-stone-600 hover:text-honey-700 font-medium py-1 px-2 rounded-lg hover:bg-honey-50/50 transition-colors">
-                  <span class="text-stone-400 text-base">✉️</span> 
-                  <span class="truncate max-w-[200px]"><?= h($m['email']) ?></span>
+            <div class="mt-6 pt-5 border-t border-stone-100 flex flex-col gap-2">
+              <?php if ($m['phone']): ?>
+                <a href="tel:<?= h(tel_to_e164($m['phone'])) ?>"
+                   class="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold py-2.5 px-4 rounded-xl text-sm shadow-sm transition-all active:scale-98">
+                  <span>📞</span> <span><?= h($m['phone']) ?></span>
                 </a>
               <?php endif; ?>
-              <?php if ($m['phone']): ?>
-                <a href="tel:<?= h(preg_replace('/[^0-9+]/', '', $m['phone'])) ?>" 
-                   class="flex items-center justify-center gap-2 text-stone-600 hover:text-honey-700 font-medium py-1 px-2 rounded-lg hover:bg-honey-50/50 transition-colors">
-                  <span class="text-stone-400 text-base">📞</span> 
-                  <span><?= h($m['phone']) ?></span>
+              <?php if ($m['email']): ?>
+                <a href="mailto:<?= h($m['email']) ?>"
+                   class="flex items-center justify-center gap-2 bg-white border border-amber-200 hover:bg-honey-50 text-honey-800 font-semibold py-2.5 px-4 rounded-xl text-sm shadow-sm transition-all active:scale-98">
+                  <span>✉️</span> <span class="truncate max-w-[180px]">E-Mail senden</span>
                 </a>
               <?php endif; ?>
             </div>
