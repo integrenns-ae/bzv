@@ -314,14 +314,20 @@ final class Templates
   </div>
 </a>
 
-<!-- Header -->
+<!--
+  Header — Nav-Band als kompaktes Rechteck. Logo sitzt im linken Slot mit
+  fixer Layout-Höhe (h-12/h-14), das Bild selbst ist deutlich höher und ragt
+  unten sichtbar aus dem Band heraus — einfach als Rechteck, keine Wabe.
+-->
 <header class="sticky top-0 bg-white/90 backdrop-blur-md border-b border-stone-200/80 shadow-sm z-40 transition-all duration-300">
-  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-    <a href="/" class="flex items-center group" aria-label="Zur Startseite">
-      <img src="/assets/logo.svg" alt="<?= h(SITE_NAME) ?>"
-           class="h-20 md:h-24 w-auto group-hover:scale-[1.02] transition-transform duration-200"
-           width="1836" height="1336">
-    </a>
+  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <div class="relative shrink-0 h-12 md:h-14 w-40 md:w-48 lg:w-56">
+      <a href="/" aria-label="Zur Startseite" class="absolute left-0 top-0 z-10 group">
+        <img src="/assets/logo.svg" alt="<?= h(SITE_NAME) ?>"
+             class="h-28 md:h-32 lg:h-40 w-auto group-hover:scale-[1.02] transition-transform duration-200 select-none"
+             width="1836" height="1336">
+      </a>
+    </div>
     
     <!-- Desktop-Navigation -->
     <nav class="hidden md:flex items-center gap-1.5">
@@ -355,7 +361,7 @@ final class Templates
   </div>
 </header>
 
-<main class="flex-1">
+<main class="flex-1 pt-14 md:pt-16 lg:pt-24">
 <?php
         // Flash-Messages anzeigen
         foreach (['success' => 'bg-emerald-50 border border-emerald-200 text-emerald-900 shadow-sm', 'error' => 'bg-red-50 border border-red-200 text-red-900 shadow-sm'] as $type => $cls) {

@@ -1,5 +1,6 @@
 /config/db.local.php
 /.deploy.env
+/HANDOFF.md
 /logs/
 /.DS_Store
 /public/.DS_Store
