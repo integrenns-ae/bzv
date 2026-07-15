@@ -7,12 +7,46 @@ declare(strict_types=1);
  */
 final class Templates
 {
-    public static function header(string $pageTitle = '', string $currentPath = '/'): void
+    /**
+     * @param string $pageTitle   Seitentitel (ohne Vereinsname)
+     * @param string $currentPath  Aktueller Pfad — für Nav-Highlight + Canonical-Fallback
+     * @param array  $meta         Optionale SEO-Overrides:
+     *                             - description: string  eigene Meta-Description
+     *                             - canonical:   string  eigene Canonical-URL (absolut oder Pfad)
+     *                             - image:       string  Social-Preview-Bild (absolut oder Pfad)
+     *                             - type:        string  Open-Graph-Typ (default 'website', z.B. 'article')
+     *                             - noindex:     bool    Seite von Suchmaschinen ausschließen
+     */
+    public static function header(string $pageTitle = '', string $currentPath = '/', array $meta = []): void
     {
         require_once __DIR__ . '/../config/db.php';
         $title = $pageTitle
             ? h($pageTitle) . ' — ' . h(SITE_NAME)
             : h(SITE_NAME) . ' — ' . h(SITE_TAGLINE);
+
+        // --- SEO-Werte auflösen ---
+        $siteUrl = rtrim(SITE_URL, '/');
+        $abs = static function (string $u) use ($siteUrl): string {
+            if ($u === '') return '';
+            return preg_match('#^https?://#i', $u) ? $u : $siteUrl . '/' . ltrim($u, '/');
+        };
+
+        $description = trim($meta['description'] ?? '') !== ''
+            ? mb_substr(trim(preg_replace('/\s+/', ' ', $meta['description'])), 0, 300)
+            : SITE_NAME . ' — ' . SITE_TAGLINE . '. Regionaler Imkerverein in Grünberg: Honigkauf, Schwarmrettung, Termine und Infos für Imkerinnen und Imker.';
+
+        // Canonical: expliziter Wert, sonst aus dem aktuellen Pfad ableiten (ohne Query/Tracking)
+        $canonical = $abs($meta['canonical'] ?? ($currentPath === '/' ? '/' : $currentPath));
+
+        $ogImage = $abs($meta['image'] ?? '/assets/apple-touch-icon.png');
+        $ogType  = $meta['type'] ?? 'website';
+
+        // Geschützte/interne Bereiche nie indexieren
+        $noindex = $meta['noindex']
+            ?? (bool)preg_match('#^/(admin|mitglieder)\b#', $currentPath);
+
+        // Strukturierte Daten (JSON-LD) nur auf öffentlichen Seiten
+        $showJsonLd = !$noindex;
         ?>
 <!DOCTYPE html>
 <html lang="de" class="scroll-smooth">
@@ -20,7 +54,50 @@ final class Templates
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $title ?></title>
-    <meta name="description" content="<?= h(SITE_NAME . ' — ' . SITE_TAGLINE) ?>">
+    <meta name="description" content="<?= h($description) ?>">
+    <link rel="canonical" href="<?= h($canonical) ?>">
+<?php if ($noindex): ?>
+    <meta name="robots" content="noindex, nofollow">
+<?php else: ?>
+    <meta name="robots" content="index, follow, max-image-preview:large">
+<?php endif; ?>
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="<?= h($ogType) ?>">
+    <meta property="og:site_name" content="<?= h(SITE_NAME) ?>">
+    <meta property="og:title" content="<?= h($pageTitle ? $pageTitle . ' — ' . SITE_NAME : SITE_NAME) ?>">
+    <meta property="og:description" content="<?= h($description) ?>">
+    <meta property="og:url" content="<?= h($canonical) ?>">
+    <meta property="og:image" content="<?= h($ogImage) ?>">
+    <meta property="og:locale" content="de_DE">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= h($pageTitle ? $pageTitle . ' — ' . SITE_NAME : SITE_NAME) ?>">
+    <meta name="twitter:description" content="<?= h($description) ?>">
+    <meta name="twitter:image" content="<?= h($ogImage) ?>">
+<?php if ($showJsonLd): ?>
+    <!-- Strukturierte Daten: lokaler Verein für Google (Knowledge Panel / lokale Suche) -->
+    <script type="application/ld+json">
+    <?= json_encode([
+        '@context' => 'https://schema.org',
+        '@type'    => 'NGO',
+        'name'     => SITE_NAME,
+        'alternateName' => 'BZV Grünberg',
+        'url'      => $siteUrl . '/',
+        'logo'     => $siteUrl . '/assets/favicon.png',
+        'image'    => $ogImage,
+        'description' => SITE_NAME . ' — ' . SITE_TAGLINE . '. Imkerverein für Grünberg und Umgebung.',
+        'telephone' => SCHWARM_TEL_E164,
+        'address'  => [
+            '@type' => 'PostalAddress',
+            'addressLocality' => 'Grünberg',
+            'addressRegion'   => 'Hessen',
+            'postalCode'      => '35305',
+            'addressCountry'  => 'DE',
+        ],
+        'areaServed' => 'Grünberg und Umgebung',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
+<?php endif; ?>
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">

@@ -1,0 +1,12 @@
+# Bienenzuchtverein Grünberg — robots.txt
+# Suchmaschinen dürfen die öffentliche Seite vollständig crawlen.
+
+User-agent: *
+Allow: /
+
+# Interne / geschützte Bereiche nicht indexieren
+Disallow: /admin/
+Disallow: /mitglieder/
+Disallow: /api/
+
+Sitemap: https://www.bienenzuchtverein-gruenberg.de/sitemap.xml

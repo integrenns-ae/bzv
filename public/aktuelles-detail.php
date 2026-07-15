@@ -28,7 +28,15 @@ if (!$post) {
     exit;
 }
 
-Templates::header($post['title'], '/aktuelles.php');
+// SEO: Beschreibung aus dem Artikeltext, eigene Canonical-URL (saubere Slug-URL)
+$excerpt = trim(preg_replace('/\s+/', ' ', strip_tags($post['body'] ?? '')));
+$ogImage = !empty($post['image_path']) ? '/bilder/' . $post['image_path'] : null;
+Templates::header($post['title'], '/aktuelles.php', [
+    'description' => $excerpt !== '' ? $excerpt : $post['title'],
+    'canonical'   => '/aktuelles/' . $post['slug'],
+    'type'        => 'article',
+    'image'       => $ogImage,
+]);
 ?>
 
 <article class="max-w-3xl mx-auto px-4 py-12 md:py-16" data-edit-resource="news" data-edit-id="<?= (int)$post['id'] ?>">

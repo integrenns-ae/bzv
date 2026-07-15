@@ -9,6 +9,9 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 # saubere URLs: /termine.ics → /termine.ics.php
 RewriteRule ^termine\.ics$ /termine.ics.php [L]
 
+# Dynamische Sitemap: /sitemap.xml → /sitemap.php
+RewriteRule ^sitemap\.xml$ /sitemap.php [L]
+
 # Aktuelles-Slug-URLs: /aktuelles/<slug>  →  /aktuelles-detail.php?slug=<slug>
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
